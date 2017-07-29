@@ -14,29 +14,17 @@ import java.util.Map;
 /**
  * Created by Ivan on 20.7.2017.
  */
-public class Renderer {
-    private static final float FOV = 70;
-    private static final float FAR = 1000;
-    private static final float NEAR = 1f;
-    private Matrix4f projectionMatrix;
+public class EntityRenderer {
+
     private StaticShader shader;
 
-    public Renderer(StaticShader shader){
+    public EntityRenderer(StaticShader shader, Matrix4f projectionMatrix){
         this.shader = shader;
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glCullFace(GL11.GL_BACK);
-        createProjectionMatrix();
         shader.start();
         shader.loadProjectionMatrix(projectionMatrix);
         shader.stop();
-    }
-    /**
-     * clears out the screen at each frame
-     */
-    public void clear(){
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT| GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(1, 0, 0, 1);
     }
 
     public void render(Map<TexturedModel, List<Entity>> entities){
@@ -62,27 +50,11 @@ public class Renderer {
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturedModel.getTexture().getTextureID());
-
     }
 
     private void prepareInstance(Entity entity){
         Matrix4f transformMatrix = MathUtils.createTransformationMatrix(entity.getPosition(), entity.getRx(), entity.getRy(), entity.getRz(), entity.getScale());
         shader.loadTransformationMatrix(transformMatrix);
-    }
-
-    private void createProjectionMatrix(){
-        float aspectRatio = (float) Display.getWidth() / (float) Display.getHeight();
-        float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV/2f))) * aspectRatio);
-        float x_scale = y_scale / aspectRatio;
-        float frustum_length = FAR - NEAR;
-
-        projectionMatrix = new Matrix4f();
-        projectionMatrix.m00 = x_scale;
-        projectionMatrix.m11 = y_scale;
-        projectionMatrix.m22 = -((FAR + NEAR) / frustum_length);
-        projectionMatrix.m23 = -1;
-        projectionMatrix.m32 = -((1 * NEAR * FAR) / frustum_length); //change to 2 or 3 depending how close you want to allow it to get without getting "swallowed" by the background
-        projectionMatrix.m33 = 0; // how far on z axis is it by default
     }
 
     private void disable(){
