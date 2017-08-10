@@ -28,21 +28,29 @@ public class Main {
         Loader loader = new Loader();
 
         RawModel model = OBJParser.loadObjModel("tree", loader);
-        TexturedModel texturedModel = new TexturedModel(model, new Texture(loader.loadTexture("tree")));
+        TexturedModel tree = new TexturedModel(model, new Texture(loader.loadTexture("tree")));
+//        tree.getTexture().setHasTransparency(true);
+        TexturedModel grass = new TexturedModel(OBJParser.loadObjModel("grassModel", loader), new Texture(loader.loadTexture("grassTexture")));
+        Texture texture = grass.getTexture();
+        texture.setUseFakeLighting(true);
+        texture.setHasTransparency(true);
+        TexturedModel bush = new TexturedModel(OBJParser.loadObjModel("fern", loader), new Texture(loader.loadTexture("fern")));
+        bush.getTexture().setHasTransparency(true);
 
-        Texture texture = texturedModel.getTexture();
         texture.setShineDamper(15);
         texture.setReflectivity(1);
 
         List<Entity> entities = new ArrayList<>();
         Random random = new Random();
         for(int i=0;i<500;i++){
-            entities.add(new Entity(texturedModel, new Vector3f(random.nextFloat()*800 - 400,0,random.nextFloat() * -600),0,0,0,3));
+            entities.add(new Entity(grass, new Vector3f(random.nextFloat()*800 - 400,0,random.nextFloat() * -600),0,0,0,1));
+            entities.add(new Entity(tree, new Vector3f(random.nextFloat()*800 - 400, 0, random.nextFloat()* -600), 0,0,0,3));
+            entities.add(new Entity(bush, new Vector3f(random.nextFloat()*800 - 400, 0, random.nextFloat()* -600), 0,0,0,0.6f));
         }
 
 //        Entity entity = new Entity(texturedModel, new Vector3f(0, -0.2f, -2), 0,0,0,0.06f);//place an object somewhere in the center
 //        Camera camera = new Camera();
-        Entity entity = new Entity(texturedModel, new Vector3f(0, 0, -25), 0,0,0,1);//place an object somewhere in the center
+        Entity entity = new Entity(grass, new Vector3f(0, 0, -25), 0,0,0,1);//place an object somewhere in the center
         Light light = new Light(new Vector3f(3000, 2000, -8), new Vector3f(1, 1, 1));
 
         Terrain terrain = new Terrain(0,- 1, loader, new Texture(loader.loadTexture("grass")));

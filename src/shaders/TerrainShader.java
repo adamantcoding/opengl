@@ -7,12 +7,12 @@ import org.lwjgl.util.vector.Vector3f;
 import utils.MathUtils;
 
 /**
- * Created by Ivan on 20.7.2017.
+ * Created by Ivan on 26.7.2017.
  */
-public class StaticShader extends AbstractShader {
+public class TerrainShader extends AbstractShader {
 
-    private static final String VERTEX_SHADER = "C:\\Users\\Ivan\\IdeaProjects\\opengl\\src\\shaders\\vertexShader.glsl";//FIXME try to use relative path
-    private static final String FRAGMENT_SHADER = "C:\\Users\\Ivan\\IdeaProjects\\opengl\\src\\shaders\\fragmentShader.glsl";
+    private static final String VERTEX_SHADER = "C:\\Users\\Ivan\\IdeaProjects\\opengl\\src\\shaders\\terrainVertexShader.glsl";//FIXME try to use relative path
+    private static final String FRAGMENT_SHADER = "C:\\Users\\Ivan\\IdeaProjects\\opengl\\src\\shaders\\terrainFragmentShader.glsl";
     private int location_transformationMatrix;
     private int location_projectionMatrix;
     private int location_viewMatrix;
@@ -20,10 +20,9 @@ public class StaticShader extends AbstractShader {
     private int location_lightColor;
     private int location_shineDamper;
     private int location_reflectivity;
-    private int location_useFakeLighting;
     private int location_skyColor;
 
-    public StaticShader() {
+    public TerrainShader() {
         super(VERTEX_SHADER, FRAGMENT_SHADER);
     }
 
@@ -43,12 +42,7 @@ public class StaticShader extends AbstractShader {
         location_lightColor = super.getUniformLocation("lightColor");
         location_shineDamper = super.getUniformLocation("shineDamper");
         location_reflectivity = super.getUniformLocation("reflectivity");
-        location_useFakeLighting = super.getUniformLocation("useFakeLighting");
         location_skyColor = super.getUniformLocation("skyColor");
-    }
-
-    public void loadUseFakeLighting(boolean use){
-        super.loadBoolean(location_useFakeLighting, use);
     }
 
     public void loadSkyColor(float r, float g, float b){
