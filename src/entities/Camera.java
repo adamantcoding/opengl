@@ -1,6 +1,8 @@
 package entities;
 
+import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
 /**
@@ -15,6 +17,12 @@ public class Camera {
     public Camera(){}
 
     public void move(){
+        try {
+            Mouse.create();
+        } catch (LWJGLException e) {
+            e.printStackTrace();
+        }
+
         if(Keyboard.isKeyDown(Keyboard.KEY_W)){
             position.z-=0.02f;
         }
@@ -26,6 +34,12 @@ public class Camera {
         }
         if(Keyboard.isKeyDown(Keyboard.KEY_S)){
             position.z+=0.02f;
+        }
+        if(Mouse.isButtonDown(0)){
+            pitch +=0.03f;
+        }
+        if(Mouse.isButtonDown(1)){
+            pitch -=0.02f;
         }
     }
 

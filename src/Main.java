@@ -6,9 +6,10 @@ import models.RawModel;
 import models.TexturedModel;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.Vector3f;
+import parser.ModelData;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
-import renderEngine.OBJParser;
+import parser.OBJParser;
 import terrains.Terrain;
 import textures.Texture;
 
@@ -27,14 +28,20 @@ public class Main {
 
         Loader loader = new Loader();
 
-        RawModel model = OBJParser.loadObjModel("tree", loader);
-        TexturedModel tree = new TexturedModel(model, new Texture(loader.loadTexture("tree")));
+        ModelData model = OBJParser.loadOBJ("tree");
+        RawModel treeModel = loader.loadToVAO(model.getVertices(), model.getTextureCoords(), model.getNormals(), model.getIndices());
+        ModelData model2 = OBJParser.loadOBJ("grassModel");
+        RawModel grassModel = loader.loadToVAO(model2.getVertices(), model2.getTextureCoords(), model2.getNormals(), model2.getIndices());
+        ModelData model3 = OBJParser.loadOBJ("fern");
+        RawModel fernModel = loader.loadToVAO(model3.getVertices(), model3.getTextureCoords(), model3.getNormals(), model3.getIndices());
+
+        TexturedModel tree = new TexturedModel(treeModel, new Texture(loader.loadTexture("tree")));
 //        tree.getTexture().setHasTransparency(true);
-        TexturedModel grass = new TexturedModel(OBJParser.loadObjModel("grassModel", loader), new Texture(loader.loadTexture("grassTexture")));
+        TexturedModel grass = new TexturedModel(grassModel, new Texture(loader.loadTexture("grassTexture")));
         Texture texture = grass.getTexture();
         texture.setUseFakeLighting(true);
         texture.setHasTransparency(true);
-        TexturedModel bush = new TexturedModel(OBJParser.loadObjModel("fern", loader), new Texture(loader.loadTexture("fern")));
+        TexturedModel bush = new TexturedModel(fernModel, new Texture(loader.loadTexture("fern")));
         bush.getTexture().setHasTransparency(true);
 
         texture.setShineDamper(15);
@@ -60,8 +67,7 @@ public class Main {
 
         MasterRenderer masterRenderer = new MasterRenderer();
         while(!Display.isCloseRequested()){
-//            entity.increasePosition(0, 1, 0);
-            entity.increaseRotation(0f, 1, 0);
+//            entity.increaseRotation(0, 1, 0);
             camera.move();
 
 ////            for(Entity e: )

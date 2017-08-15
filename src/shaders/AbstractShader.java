@@ -27,7 +27,7 @@ public abstract class AbstractShader {
         GL20.glAttachShader(programID, fragmentShaderID);
         bindAttributes();
         GL20.glLinkProgram(programID);
-        GL20.glValidateProgram(programID);
+//        GL20.glValidateProgram(programID); //optional
 //        start();
         getAllUniformLocations();
     }
@@ -98,7 +98,7 @@ public abstract class AbstractShader {
         int shaderID = GL20.glCreateShader(type);
         GL20.glShaderSource(shaderID, shaderSource);
         GL20.glCompileShader(shaderID);
-        if(GL20.glGetShader(shaderID, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE){
+        if(GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE){
             System.out.println(GL20.glGetShaderInfoLog(shaderID, 500));
             System.exit(-1);
         }

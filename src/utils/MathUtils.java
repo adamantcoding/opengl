@@ -12,9 +12,9 @@ public class MathUtils {
         Matrix4f matrix4f = new Matrix4f();
         matrix4f.setIdentity();
         matrix4f.translate(translation, matrix4f, matrix4f);//model is getting distanced on a z axis
-//        matrix4f.rotate((float)Math.toRadians(rx), new Vector3f(1, 0,0), matrix4f, matrix4f); //tupsy turvy on a z direction
-        matrix4f.rotate((float)Math.toRadians(rx), new Vector3f(0, 1,0), matrix4f, matrix4f); //horizontally(y)
-//        matrix4f.rotate((float)Math.toRadians(rx), new Vector3f(0, 0,1), matrix4f, matrix4f);//tupsy turvy on x direction
+        matrix4f.rotate((float)Math.toRadians(rx), new Vector3f(1, 0,0), matrix4f, matrix4f); //tupsy turvy on a z direction
+        matrix4f.rotate((float)Math.toRadians(ry), new Vector3f(0, 1,0), matrix4f, matrix4f); //horizontally(y)
+        matrix4f.rotate((float)Math.toRadians(rz), new Vector3f(0, 0,1), matrix4f, matrix4f);//tupsy turvy on x direction
         matrix4f.scale(new Vector3f(scale, scale, scale), matrix4f, matrix4f);
         return matrix4f;
     }

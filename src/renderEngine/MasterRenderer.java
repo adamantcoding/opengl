@@ -99,7 +99,6 @@ public class MasterRenderer {
 
     public static void disableCulling(){
         GL11.glDisable(GL11.GL_CULL_FACE);
-
     }
 
     private void createProjectionMatrix(){
