@@ -32,7 +32,7 @@ public class MasterRenderer {
     private Map<TexturedModel, List<Entity>> entities = new HashMap<>();
     private List<Terrain> terrains = new ArrayList<>();
 
-    private static final float RED = 0.8f;  //0.5 for grey sky, 0.8 pinky
+    private static final float RED = 0.5f;  //0.5 for grey sky, 0.8 pinky
     private static final float GREEN = 0.5f;
     private static final float BLUE = 0.6f;
 

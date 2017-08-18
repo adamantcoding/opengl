@@ -28,7 +28,6 @@ public abstract class AbstractShader {
         bindAttributes();
         GL20.glLinkProgram(programID);
 //        GL20.glValidateProgram(programID); //optional
-//        start();
         getAllUniformLocations();
     }
 
@@ -38,6 +37,10 @@ public abstract class AbstractShader {
 
     protected void loadFloat(int location, float value){
         GL20.glUniform1f(location, value);
+    }
+
+    protected void loadInt(int location, int value){
+        GL20.glUniform1i(location, value);
     }
 
     protected void loadVector(int location, Vector3f value){
