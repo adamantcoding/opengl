@@ -11,8 +11,19 @@ public class Entity {
     private Vector3f position;
     private float rx, ry, rz; //rotation parameters
     private float scale;
+    private int textureIndex = 0;
 
     public Entity(TexturedModel texturedModel, Vector3f position, float rx, float ry, float rz, float scale) {
+        this.texturedModel = texturedModel;
+        this.position = position;
+        this.rx = rx;
+        this.ry = ry;
+        this.rz = rz;
+        this.scale = scale;
+    }
+
+    public Entity(TexturedModel texturedModel, int index, Vector3f position, float rx, float ry, float rz, float scale) {
+        this.textureIndex = index;
         this.texturedModel = texturedModel;
         this.position = position;
         this.rx = rx;
@@ -31,6 +42,16 @@ public class Entity {
         this.rx += x;
         this.ry += y;
         this.rz += z;
+    }
+
+    public float getTextureXOffset(){
+        int column = textureIndex % texturedModel.getTexture().getNumOfRows();
+        return (float) column/(float) texturedModel.getTexture().getNumOfRows();
+    }
+
+    public float getTextureYOffset(){
+        int row = textureIndex % texturedModel.getTexture().getNumOfRows();
+        return (float) row/(float) texturedModel.getTexture().getNumOfRows();
     }
 
     public TexturedModel getTexturedModel() {

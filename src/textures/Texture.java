@@ -10,6 +10,14 @@ public class Texture {
     private boolean hasTransparency = false;
     private boolean useFakeLighting = false;
 
+    private int numOfRows = 1; //for texture atlases
+
+    public int getNumOfRows() {
+        return numOfRows;
+    }
+    public void setNumOfRows(int numOfRows) {
+        this.numOfRows = numOfRows;
+    }
     public float getShineDamper() {
         return shineDamper;
     }

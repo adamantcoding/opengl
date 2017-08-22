@@ -32,9 +32,9 @@ public class MasterRenderer {
     private Map<TexturedModel, List<Entity>> entities = new HashMap<>();
     private List<Terrain> terrains = new ArrayList<>();
 
-    private static final float RED = 0.5f;  //0.5 for grey sky, 0.8 pinky
+    private static final float RED = 0.51f;  //0.5 for grey sky, 0.8 pinky
     private static final float GREEN = 0.5f;
-    private static final float BLUE = 0.6f;
+    private static final float BLUE = 0.55f;
 
     private static final float FOV = 90;
     private static final float FAR = 1000;
@@ -53,21 +53,21 @@ public class MasterRenderer {
     public void clear(){
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT| GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(RED, GREEN, BLUE, 1);  //here is how the "sky" color is set
+        GL11.glClearColor(RED, GREEN, BLUE, 0);  //here is how the "sky" color is set
     }
 
-    public void render(Light light, Camera camera){
+    public void render(List<Light> lights, Camera camera){
         clear();
         staticShader.start();
         staticShader.loadSkyColor(RED, GREEN, BLUE);
-        staticShader.loadLight(light);
+        staticShader.loadLights(lights);
         staticShader.loadViewMatrix(camera);
         entityRenderer.render(entities);
         staticShader.stop();
 
         terrainShader.start();
         terrainShader.loadSkyColor(RED, GREEN, BLUE);
-        terrainShader.loadLight(light);
+        terrainShader.loadLights(lights);
         terrainShader.loadViewMatrix(camera);
         terrainRenderer.render(terrains);
         terrainShader.stop();
@@ -115,7 +115,6 @@ public class MasterRenderer {
         projectionMatrix.m32 = -((1 * NEAR * FAR) / frustum_length); //change to 2 or 3 depending how close you want to allow it to get without getting "swallowed" by the background
         projectionMatrix.m33 = 0; // how far on z axis is it by default
     }
-
 
     public void cleanUp(){
         staticShader.clean();

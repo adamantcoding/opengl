@@ -4,6 +4,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -59,6 +60,10 @@ public abstract class AbstractShader {
         matrix4f.store(floatBuffer);
         floatBuffer.flip();
         GL20.glUniformMatrix4(location, false, floatBuffer);
+    }
+
+    protected void loadVector2f(int location, Vector2f vector2f){
+        GL20.glUniform2f(location, vector2f.x, vector2f.y);
     }
 
     public void start(){
