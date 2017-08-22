@@ -14,6 +14,7 @@ import parser.ModelData;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
 import parser.OBJParser;
+import renderEngine.OBJLoader;
 import terrains.Terrain;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
@@ -47,8 +48,10 @@ public class Main {
         RawModel grassModel = loader.loadToVAO(model2.getVertices(), model2.getTextureCoords(), model2.getNormals(), model2.getIndices());
         ModelData model3 = OBJParser.loadOBJ("fern");
         RawModel fernModel = loader.loadToVAO(model3.getVertices(), model3.getTextureCoords(), model3.getNormals(), model3.getIndices());
-        ModelData model4 = OBJParser.loadOBJ("lowPolyTree");
-        RawModel bobbleModel = loader.loadToVAO(model4.getVertices(), model3.getTextureCoords(), model3.getNormals(), model3.getIndices());
+        ModelData model4 = OBJParser.loadOBJ("pine");
+//        RawModel bobbleModel = loader.loadToVAO(model4.getVertices(), model3.getTextureCoords(), model3.getNormals(), model3.getIndices());
+        ModelData model5 = OBJParser.loadOBJ("lamp");
+        RawModel lampModel = loader.loadToVAO(model5.getVertices(), model5.getTextureCoords(), model5.getNormals(), model5.getIndices());
 
         TexturedModel tree = new TexturedModel(treeModel, new Texture(loader.loadTexture("tree")));
 //        tree.getTexture().setHasTransparency(true);
@@ -59,14 +62,18 @@ public class Main {
         TexturedModel bush = new TexturedModel(fernModel, new Texture(loader.loadTexture("fernAtlas")));
         bush.getTexture().setHasTransparency(true);
         bush.getTexture().setNumOfRows(2);
-        TexturedModel bobble = new TexturedModel(bobbleModel, new Texture(loader.loadTexture("lowPolyTree")));
-        bush.getTexture().setHasTransparency(true);
+        TexturedModel bobble = new TexturedModel(OBJLoader.loadObjModel("pine", loader), new Texture(loader.loadTexture("pine")));
+        bobble.getTexture().setHasTransparency(true);
+        bobble.getTexture().setUseFakeLighting(true);
+        TexturedModel lamp = new TexturedModel(OBJLoader.loadObjModel("lamp", loader), new Texture(loader.loadTexture("lamp")));
+        lamp.getTexture().setUseFakeLighting(true);
 
-        ModelData model5 = OBJParser.loadOBJ("stanfordBunny");
-        RawModel bunnyModel = loader.loadToVAO(model5.getVertices(), model5.getTextureCoords(), model5.getNormals(), model5.getIndices());
-        TexturedModel stanfordBunny = new TexturedModel(bunnyModel, new Texture(loader.loadTexture("white")));
-        Player player = new Player(stanfordBunny, new Vector3f(100, 0, -50), 0,0,0, 1);
-//
+        ModelData model6 = OBJParser.loadOBJ("person");
+        RawModel manModel = loader.loadToVAO(model6.getVertices(), model6.getTextureCoords(), model6.getNormals(), model6.getIndices());
+        TexturedModel man = new TexturedModel(manModel, new Texture(loader.loadTexture("playerTexture")));
+//        man.getTexture().setReflectivity(1.1f);
+        Player player = new Player(man, new Vector3f(100, 15, -150), 0,180,0, 1);
+
 //        texture.setShineDamper(15);
 //        texture.setReflectivity(1);
 
@@ -75,13 +82,13 @@ public class Main {
         List<Entity> entities = new ArrayList<>();
         Random random = new Random(676452);
         for(int i=0;i<400;i++){
-            if(i % 7 == 0){
+            if(i % 3 == 0){
                 float x = random.nextFloat()*400 - 200;
                 float z = random.nextFloat() * -400;
                 float y = terrain.getTerrainHeight(x, z);
-                entities.add(new Entity(grass, new Vector3f(x,y,z),0,0,0,1));
+                entities.add(new Entity(grass, new Vector3f(x,y,z),0,0,0,0.6f));
             }
-            if(i % 3 == 0){
+            if(i % 2 == 0){
                 float x = random.nextFloat()*400 - 200;
                 float z = random.nextFloat() * -400;
                 float y = terrain.getTerrainHeight(x, z);
@@ -92,29 +99,33 @@ public class Main {
                 z = random.nextFloat() * -600;
                 y = terrain.getTerrainHeight(x, z);
 
-                entities.add(new Entity(bobble, new Vector3f(x,y,z),0,random.nextFloat()*360,0,
+                entities.add(new Entity(bobble, random.nextInt(4), new Vector3f(x,y,z),0,random.nextFloat()*360,0,
                         random.nextFloat()*0.1f + 0.6f));
 
-                x = random.nextFloat()*800 - 400;
-                z = random.nextFloat() * -600;
-                y = terrain.getTerrainHeight(x, z);
-
-                entities.add(new Entity(tree, new Vector3f(x, y, z), 0,0,0,random.nextFloat() * 1 + 4));
+//                x = random.nextFloat()*800 - 400;
+//                z = random.nextFloat() * -600;
+//                y = terrain.getTerrainHeight(x, z);
+//
+//                entities.add(new Entity(tree, new Vector3f(x, y, z), 0,0,0,random.nextFloat() * 1 + 4));
             }
         }
 
 //      Entity entity = new Entity(texturedModel, new Vector3f(0, -0.2f, -2), 0,0,0,0.06f);//place an object somewhere in the center
 //      Entity entity = new Entity(grass, new Vector3f(0, 0, -25), 0,0,0,1);//place an object somewhere in the center
         List<Light> lights = new ArrayList<>();
-        lights.add(new Light(new Vector3f(player.getPosition().x, 20000, 20000), new Vector3f(1, 1, 1)));
-        lights.add(new Light(new Vector3f(-3000, -200, 20000), new Vector3f(10, 0, 0)));
-        lights.add(new Light(new Vector3f(3000, -2500, -20000), new Vector3f(1, 0, 1)));
-        lights.add(new Light(new Vector3f(-900, 48000, 150), new Vector3f(0, 0, 1)));
+        lights.add(new Light(new Vector3f(185, 1000, -7000), new Vector3f(0.4f, 0.4f, 0.4f)));
+        lights.add(new Light(new Vector3f(185, 12.5f, -293), new Vector3f(2, 0, 0), new Vector3f(0.5f, 0.001f, 0.0002f)));//tweak these to change brightness/attenuation
+        lights.add(new Light(new Vector3f(370, 25f, -300), new Vector3f(0, 2, 2), new Vector3f(0.5f, .001f, 0.0002f)));
+        lights.add(new Light(new Vector3f(293, 17, -305), new Vector3f(2, 2, 0), new Vector3f(0.5f, .001f, 0.0002f)));
+
+        entities.add(new Entity(lamp, new Vector3f(185, -5f, -293), 0,0,0,1));
+        entities.add(new Entity(lamp, new Vector3f(370, 4.2f, -300), 0,0,0,1));
+        entities.add(new Entity(lamp, new Vector3f(293, -6.8f, -315), 0,0,0,1));
 
         Camera camera = new Camera(player);
-        MasterRenderer masterRenderer = new MasterRenderer();
+        MasterRenderer masterRenderer = new MasterRenderer(loader);
         List<HUDTexture> guis = new ArrayList<>();
-        HUDTexture hudTexture = new HUDTexture(loader.loadTexture("socuwan"), new Vector2f(0.5f, 0.5f), new Vector2f(0.25f, 0.25f));
+        HUDTexture hudTexture = new HUDTexture(loader.loadTexture("health"), new Vector2f(0.6f, 0.8f), new Vector2f(0.25f, 0.25f));
         guis.add(hudTexture);
         HUDRenderer hudRenderer = new HUDRenderer(loader);
 

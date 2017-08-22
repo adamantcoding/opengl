@@ -10,6 +10,8 @@ import org.lwjgl.util.vector.Matrix4f;
 import shaders.StaticShader;
 import shaders.TerrainRenderer;
 import shaders.TerrainShader;
+import skybox.SkyboxRenderer;
+import skybox.SkyboxShader;
 import terrains.Terrain;
 
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ public class MasterRenderer {
     private EntityRenderer entityRenderer;
 
     private TerrainRenderer terrainRenderer;
+    private SkyboxRenderer skyboxRenderer;
     private TerrainShader terrainShader = new TerrainShader();
 
     private Map<TexturedModel, List<Entity>> entities = new HashMap<>();
@@ -37,14 +40,15 @@ public class MasterRenderer {
     private static final float BLUE = 0.55f;
 
     private static final float FOV = 90;
-    private static final float FAR = 1000;
+    private static final float FAR = 10000; //for now keep it large, otherwise sky might render with some "holes" and stitches
     private static final float NEAR = 1f;
 
-    public MasterRenderer(){
+    public MasterRenderer(Loader loader){
         enableCulling();
         createProjectionMatrix();
         entityRenderer = new EntityRenderer(staticShader, projectionMatrix);
         terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
+        skyboxRenderer = new SkyboxRenderer(loader, projectionMatrix);
     }
 
     /**
@@ -71,6 +75,8 @@ public class MasterRenderer {
         terrainShader.loadViewMatrix(camera);
         terrainRenderer.render(terrains);
         terrainShader.stop();
+
+        skyboxRenderer.render(camera);
 
         terrains.clear();
         entities.clear();
